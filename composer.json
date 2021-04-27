@@ -3,6 +3,7 @@
   "description": "Small configuration files management library.",
   "type": "library",
   "keywords": ["config"],
+  "license": "GPL-2.0-or-later",
   "authors": [
     {
       "name": "Veronika Merchalova",
@@ -23,6 +24,5 @@
   },
   "scripts": {
     "test": "vendor/bin/phpunit --do-not-cache-result"
-  },
-  "version": "0.0.1"
+  }
 }
