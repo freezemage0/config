@@ -1,0 +1,23 @@
+{
+  "name": "freezemage0/config",
+  "description": "Small configuration files management library.",
+  "type": "library",
+  "keywords": ["config"],
+  "authors": [
+    {
+      "name": "Veronika Merchalova",
+      "email": "freezemage0@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.2",
+    "php-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Freezemage\\Config": "src"
+    }
+  },
+  "version": "0.0.1"
+}
