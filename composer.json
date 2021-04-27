@@ -12,11 +12,11 @@
   ],
   "require": {
     "php": ">=7.2",
-    "php-json": "*"
+    "ext/php-json": "*"
   },
   "autoload": {
     "psr-4": {
-      "Freezemage\\Config": "src"
+      "Freezemage\\Config\\": "src"
     }
   },
   "version": "0.0.1"
