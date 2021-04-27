@@ -14,6 +14,7 @@ class FileConfigFactory {
     public function __construct() {
         $this->configs = new SplObjectStorage();
         $this->register(new JsonConfig());
+        $this->register(new IniConfig());
     }
 
     public function register(FileConfig $config): void {
