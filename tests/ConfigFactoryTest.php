@@ -5,14 +5,13 @@ namespace Freezemage\Config;
 
 
 use Freezemage\Config\Exception\InvalidConfigFileException;
-use Freezemage\Config\Exception\MissingConfigNameException;
 use Freezemage\Config\Exception\UnsupportedFileExtensionException;
 use Freezemage\Config\Exporter\JsonExporter;
 use Freezemage\Config\Importer\JsonImporter;
 use PHPUnit\Framework\TestCase;
 
 
-class FileConfigFactoryTest extends TestCase {
+class ConfigFactoryTest extends TestCase {
     public function testCreate(): void {
         $factory = new ConfigFactory();
         $jsonConfig = $factory->create(__DIR__ . '/asset/config.json');
