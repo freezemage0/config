@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Freezemage\Config;
+namespace Freezemage\Config\Exception;
 
 
 use Throwable;

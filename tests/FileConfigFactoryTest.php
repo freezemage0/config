@@ -4,38 +4,34 @@
 namespace Freezemage\Config;
 
 
+use Freezemage\Config\Exception\InvalidConfigFileException;
+use Freezemage\Config\Exception\MissingConfigNameException;
+use Freezemage\Config\Exception\UnsupportedFileExtensionException;
+use Freezemage\Config\Exporter\JsonExporter;
+use Freezemage\Config\Importer\JsonImporter;
 use PHPUnit\Framework\TestCase;
 
 
 class FileConfigFactoryTest extends TestCase {
-    /**
-     * @covers \Freezemage\Config\FileConfigFactory::create
-     *
-     * @throws InvalidConfigFileException
-     * @throws UnsupportedFileExtensionException
-     */
     public function testCreate(): void {
-        $factory = new FileConfigFactory();
+        $factory = new ConfigFactory();
+        $jsonConfig = $factory->create(__DIR__ . '/asset/config.json');
 
-        $config = $factory->create(__DIR__ . '/asset/config.json');
-        $this->assertInstanceOf(JsonConfig::class, $config);
-
-        $config = $factory->create(__DIR__ . '/asset/config.ini');
-        $this->assertInstanceOf(IniConfig::class, $config);
+        $this->assertInstanceOf(JsonImporter::class, $jsonConfig->getImporter());
+        $this->assertInstanceOf(JsonExporter::class, $jsonConfig->getExporter());
     }
 
-    /**
-     * @covers \Freezemage\Config\FileConfigFactory::create
-     *
-     * @throws InvalidConfigFileException
-     * @throws UnsupportedFileExtensionException
-     */
+    public function testUnsupportedExtension(): void {
+        $factory = new ConfigFactory();
+
+        $this->expectException(UnsupportedFileExtensionException::class);
+        $factory->create('unknown.extension');
+    }
+
     public function testMissingFileExtension(): void {
-        $factory = new FileConfigFactory();
+        $factory = new ConfigFactory();
 
         $this->expectException(InvalidConfigFileException::class);
-        $this->expectExceptionMessage('Unable to determine file extension.');
-
-        $factory->create('config');
+        $factory->create('no-extension');
     }
 }
