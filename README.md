@@ -108,6 +108,8 @@ $username = $config->get('database.username');
 echo $username; // prints "user"
 ```
 
+Key chaining may be disabled by calling `ImmutableConfig->disableKeyChaining()`. It is enabled by default.
+
 #### Saving
 You can also create/edit configuration using `ImmutableConfig::set()` method.
 When you set value, you get a new instance of `ImmutableConfig` with a new `key => value` pair.
