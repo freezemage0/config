@@ -11,7 +11,7 @@ class PhpExporter implements ExporterInterface {
     protected $filename;
 
     public function export(ConfigInterface $config): void {
-        $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . var_export($config, true) . ';' . PHP_EOL;
+        $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . var_export($config->getConfig(), true) . ';' . PHP_EOL;
 
         if (empty($this->filename)) {
             $this->filename = md5($content) . '.php';
