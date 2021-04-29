@@ -21,6 +21,10 @@ class ImmutableConfig implements ConfigInterface {
      * @var array $config
      */
     protected $config;
+    /**
+     * @var bool $keyChaining;
+     */
+    protected $keyChaining;
 
     public function __construct(ImporterInterface $importer, ExporterInterface $exporter) {
         $this->importer = $importer;
@@ -52,19 +56,23 @@ class ImmutableConfig implements ConfigInterface {
     public function get(string $key, $defaultValue = null) {
         $config = $this->getConfig();
 
-        $parts = explode('.', $key);
+        if ($this->isKeyChainingEnabled()) {
+            $parts = explode('.', $key);
 
-        do {
-            $part = array_shift($parts);
+            do {
+                $part = array_shift($parts);
 
-            if (!array_key_exists($part, $config)) {
-                return $defaultValue;
-            }
+                if (!array_key_exists($part, $config)) {
+                    return $defaultValue;
+                }
 
-            $config = $config[$part];
-        } while (!empty($parts));
+                $config = $config[$part];
+            } while (!empty($parts));
 
-        return $config;
+            return $config;
+        }
+
+        return $config[$key] ?? $defaultValue;
     }
 
     /**
@@ -91,11 +99,15 @@ class ImmutableConfig implements ConfigInterface {
     public function set($key, $value): ConfigInterface {
         $clone = clone $this;
 
-        $parts = explode('.', $key);
-        $clone->config = array_merge_recursive(
+        if ($this->isKeyChainingEnabled()) {
+            $parts = explode('.', $key);
+            $clone->config = array_merge_recursive(
                 $this->getConfig(),
                 $this->buildConfig($parts, $value)
-        );
+            );
+        } else {
+            $clone->config[$key] = $value;
+        }
 
         return $clone;
     }
@@ -158,5 +170,17 @@ class ImmutableConfig implements ConfigInterface {
 
     public function getExporter(): ExporterInterface {
         return $this->exporter;
+    }
+
+    public function enableKeyChaining(): void {
+        $this->keyChaining = true;
+    }
+
+    public function disableKeyChaining(): void {
+        $this->keyChaining = false;
+    }
+
+    public function isKeyChainingEnabled(): bool {
+        return $this->keyChaining ?? true;
     }
 }

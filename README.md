@@ -1,6 +1,6 @@
 # Configuration
 `freezemage0/config` is a library that provides an easy way to read and create configuration files.
-Support `.json`, `.ini` and `.php` formats.
+Supports `.json`, `.ini` and `.php` formats.
 
 ## Usage
 
@@ -44,7 +44,7 @@ class MyImporter implements ImporterInterface {
     }
     
     public function setFilename(string $filename): void {
-        $this->filename = $filename;;
+        $this->filename = $filename;
     }
     
     public function getFilename(): ?string {
@@ -160,5 +160,6 @@ $config->save();
 ```
 
 
-### Precautions:
+## Precautions
+
 Nested sections are not supported for `IniExporter`. Calling `IniExporter->export()` with nested configuration keys WILL NOT throw an exception. 
