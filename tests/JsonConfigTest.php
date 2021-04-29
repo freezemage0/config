@@ -4,6 +4,7 @@
 namespace Freezemage\Config;
 
 
+use Freezemage\Config\Exception\MalformedConfigException;
 use Freezemage\Config\Exporter\JsonExporter;
 use Freezemage\Config\Importer\JsonImporter;
 use PHPUnit\Framework\TestCase;
@@ -42,5 +43,20 @@ class JsonConfigTest extends TestCase {
 
         $this->assertFileExists($filename);
         unlink($filename);
+    }
+
+    public function testCannotImport(): void {
+        $importer = new JsonImporter();
+        $exporter = new JsonExporter();
+
+        $filename = __DIR__ . '/asset/invalid-config.json';
+
+        file_put_contents($filename, '[invalid-json');
+
+        $importer->setFilename($filename);
+        $config = new ImmutableConfig($importer, $exporter);
+
+        $this->expectException(MalformedConfigException::class);
+        $config->getConfig();
     }
 }

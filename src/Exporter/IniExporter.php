@@ -39,4 +39,8 @@ class IniExporter implements ExporterInterface {
     public function setFilename(string $filename): void {
         $this->filename = $filename;
     }
+
+    public function getFilename(): ?string {
+        return $this->filename;
+    }
 }

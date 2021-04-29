@@ -28,6 +28,27 @@ class ImmutableConfig implements ConfigInterface {
         $this->config = array();
     }
 
+    /**
+     * Reads parameter from configuration.
+     * Can use `key chaining` in order to retrieve nested configurations.
+     *
+     * Example of key chaining:
+     *  Configuration:
+     *      array(
+     *          'database' => array(
+     *              'username' => 'user',
+     *              'password' => 'passwd'
+     *          )
+     *      )
+     *  Key chain 'database.username' will return 'user'.
+     *
+     * Key chaining makes it impossible to read configuration keys which contain dot.
+     *
+     * @param string $key
+     * @param null $defaultValue
+     *
+     * @return mixed|null
+     */
     public function get(string $key, $defaultValue = null) {
         $config = $this->getConfig();
 
@@ -46,6 +67,27 @@ class ImmutableConfig implements ConfigInterface {
         return $config;
     }
 
+    /**
+     * Clones the current instance of config and sets the configuration by key.
+     * Can use key chaining in order to set nested configuration values.
+     *
+     * Example of key chaining:
+     *  `set` called with parameters 'database.username', 'user'.
+     *  Configuration will have the following values:
+     *      array(
+     *          'database' => array(
+     *              'username' => 'user',
+     *              'password' => 'passwd'
+     *          )
+     *      )
+     *
+     * Key chaining makes it impossible to read configuration keys which contain dot.
+     *
+     * @param $key
+     * @param $value
+     *
+     * @return ConfigInterface
+     */
     public function set($key, $value): ConfigInterface {
         $clone = clone $this;
 
@@ -68,6 +110,11 @@ class ImmutableConfig implements ConfigInterface {
         return array($part => $value);
     }
 
+    /**
+     * Lazy-loads and returns full configuration.
+     *
+     * @return array
+     */
     public function getConfig(): array {
         if (!empty($this->config)) {
             return $this->config;
@@ -80,14 +127,27 @@ class ImmutableConfig implements ConfigInterface {
         return $this->config;
     }
 
+    /**
+     * Creates new configuration.
+     */
     public function save(): void {
         $this->exporter->export($this);
     }
 
+    /**
+     * @param ImporterInterface $importer
+     *
+     * @codeCoverageIgnore
+     */
     public function setImporter(ImporterInterface $importer): void {
         $this->importer = $importer;
     }
 
+    /**
+     * @param ExporterInterface $exporter
+     *
+     * @codeCoverageIgnore
+     */
     public function setExporter(ExporterInterface $exporter): void {
         $this->exporter = $exporter;
     }
