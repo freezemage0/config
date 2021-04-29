@@ -7,8 +7,10 @@ namespace Freezemage\Config;
 use Freezemage\Config\Exception\InvalidConfigFileException;
 use Freezemage\Config\Exception\UnsupportedFileExtensionException;
 use Freezemage\Config\Exporter\ExporterInterface;
+use Freezemage\Config\Exporter\IniExporter;
 use Freezemage\Config\Exporter\JsonExporter;
 use Freezemage\Config\Importer\ImporterInterface;
+use Freezemage\Config\Importer\IniImporter;
 use Freezemage\Config\Importer\JsonImporter;
 
 
@@ -21,7 +23,10 @@ class ConfigFactory {
         $this->exporterMap = array();
 
         $this->registerImporter('json', new JsonImporter());
+        $this->registerImporter('ini', new IniImporter());
+
         $this->registerExporter('json', new JsonExporter());
+        $this->registerExporter('ini', new IniExporter());
     }
 
     public function registerImporter(string $format, ImporterInterface $importer) {
