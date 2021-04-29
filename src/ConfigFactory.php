@@ -9,12 +9,14 @@ use Freezemage\Config\Exception\UnsupportedFileExtensionException;
 use Freezemage\Config\Exporter\ExporterInterface;
 use Freezemage\Config\Exporter\IniExporter;
 use Freezemage\Config\Exporter\JsonExporter;
+use Freezemage\Config\Exporter\PhpExporter;
 use Freezemage\Config\Importer\ImporterInterface;
 use Freezemage\Config\Importer\IniImporter;
 use Freezemage\Config\Importer\JsonImporter;
+use Freezemage\Config\Importer\PhpImporter;
 
 
-class ConfigFactory {
+final class ConfigFactory {
     protected $importerMap;
     protected $exporterMap;
 
@@ -24,9 +26,11 @@ class ConfigFactory {
 
         $this->registerImporter('json', new JsonImporter());
         $this->registerImporter('ini', new IniImporter());
+        $this->registerImporter('php', new PhpImporter());
 
         $this->registerExporter('json', new JsonExporter());
         $this->registerExporter('ini', new IniExporter());
+        $this->registerExporter('php', new PhpExporter());
     }
 
     public function registerImporter(string $format, ImporterInterface $importer) {
