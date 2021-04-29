@@ -25,6 +25,7 @@ class ImmutableConfig implements ConfigInterface {
     public function __construct(ImporterInterface $importer, ExporterInterface $exporter) {
         $this->importer = $importer;
         $this->exporter = $exporter;
+        $this->config = array();
     }
 
     public function get(string $key, $defaultValue = null) {
@@ -68,7 +69,11 @@ class ImmutableConfig implements ConfigInterface {
     }
 
     public function getConfig(): array {
-        if (!isset($this->config)) {
+        if (!empty($this->config)) {
+            return $this->config;
+        }
+
+        if (!empty($this->importer->getFilename())) {
             $this->config = $this->importer->import();
         }
 

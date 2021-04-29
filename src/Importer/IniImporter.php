@@ -7,22 +7,18 @@ namespace Freezemage\Config\Importer;
 use Freezemage\Config\Exception\MalformedConfigException;
 
 
-class JsonImporter implements ImporterInterface {
+class IniImporter implements ImporterInterface {
     /** @var string|null $filename */
     protected $filename;
 
     public function import(): array {
-        $content = file_get_contents($this->filename);
-        $config = json_decode($content, true);
+        $content = parse_ini_file($this->filename, true);
 
-        if (json_last_error() != JSON_ERROR_NONE) {
-            throw new MalformedConfigException(
-                json_last_error_msg(),
-                json_last_error()
-            );
+        if ($content === false) {
+            throw new MalformedConfigException('Failed to parse .ini file.');
         }
 
-        return $config;
+        return $content;
     }
 
     public function setFilename(string $filename): void {
