@@ -10,6 +10,7 @@ use Freezemage\Config\Exporter\ExporterInterface;
 use Freezemage\Config\Exporter\IniExporter;
 use Freezemage\Config\Exporter\JsonExporter;
 use Freezemage\Config\Exporter\PhpExporter;
+use Freezemage\Config\Feature\FeatureManager;
 use Freezemage\Config\Importer\ImporterInterface;
 use Freezemage\Config\Importer\IniImporter;
 use Freezemage\Config\Importer\JsonImporter;
@@ -19,10 +20,12 @@ use Freezemage\Config\Importer\PhpImporter;
 final class ConfigFactory {
     protected $importerMap;
     protected $exporterMap;
+    protected $featureRegistry;
 
     public function __construct() {
         $this->importerMap = array();
         $this->exporterMap = array();
+        $this->featureRegistry = new FeatureManager();
 
         $this->registerImporter('json', new JsonImporter());
         $this->registerImporter('ini', new IniImporter());
@@ -61,6 +64,10 @@ final class ConfigFactory {
         throw new UnsupportedFileExtensionException(sprintf('File extension "%s" is not supported.', $format));
     }
 
+    public function getFeatureRegistry(): FeatureManager {
+        return $this->featureRegistry;
+    }
+    
     /**
      * @param string $filename
      *
@@ -82,6 +89,7 @@ final class ConfigFactory {
         $exporter = $this->findExporter($extension);
         $exporter->setFilename($filename);
 
-        return new ImmutableConfig($importer, $exporter);
+        $keyChaining = clone $this->getFeatureRegistry()->getKeyChaining();
+        return new ImmutableConfig($importer, $exporter, $keyChaining);
     }
 }

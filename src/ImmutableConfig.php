@@ -5,6 +5,7 @@ namespace Freezemage\Config;
 
 
 use Freezemage\Config\Exporter\ExporterInterface;
+use Freezemage\Config\Feature\KeyChaining;
 use Freezemage\Config\Importer\ImporterInterface;
 
 
@@ -26,10 +27,11 @@ class ImmutableConfig implements ConfigInterface {
      */
     protected $keyChaining;
 
-    public function __construct(ImporterInterface $importer, ExporterInterface $exporter) {
+    public function __construct(ImporterInterface $importer, ExporterInterface $exporter, KeyChaining $keyChaining) {
         $this->importer = $importer;
         $this->exporter = $exporter;
         $this->config = array();
+        $this->keyChaining = $keyChaining;
     }
 
     /**
@@ -73,6 +75,24 @@ class ImmutableConfig implements ConfigInterface {
         }
 
         return $config[$key] ?? $defaultValue;
+    }
+    
+    /**
+     * Transforms a section of config into a separate config.
+     * Detached section behaves as a whole separate config, but points to original file.
+     * See {@link ImporterInterface::setFilename()} and {@link ExporterInterface::setFilename()}
+     * on how to change the import/export filename.
+     *
+     * @param string $name
+     * @return ImmutableConfig
+     */
+    public function extractSection(string $name): ImmutableConfig {
+        $section = $this->get($name);
+        
+        $config = clone $this;
+        $config->config = array($name => $section);
+        
+        return $config;
     }
 
     /**
@@ -173,14 +193,14 @@ class ImmutableConfig implements ConfigInterface {
     }
 
     public function enableKeyChaining(): void {
-        $this->keyChaining = true;
+        $this->keyChaining->enable();
     }
 
     public function disableKeyChaining(): void {
-        $this->keyChaining = false;
+        $this->keyChaining->disable();
     }
 
     public function isKeyChainingEnabled(): bool {
-        return $this->keyChaining ?? true;
+        return $this->keyChaining->isEnabled();
     }
 }
