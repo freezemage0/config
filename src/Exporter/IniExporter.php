@@ -5,6 +5,7 @@ namespace Freezemage\Config\Exporter;
 
 
 use Freezemage\Config\ConfigInterface;
+use Freezemage\Config\Exception\UnsupportedNestingException;
 
 
 class IniExporter implements ExporterInterface {
@@ -20,6 +21,11 @@ class IniExporter implements ExporterInterface {
                 $content .= sprintf('[%s]', $section) . PHP_EOL;
 
                 foreach ($items as $name => $item) {
+                    if (is_array($item)) {
+                        throw new UnsupportedNestingException(
+                                'Ini files do not support nesting sections.'
+                        );
+                    }
                     $content .= sprintf('%s=%s', $name, $item) . PHP_EOL;
                 }
             } else {

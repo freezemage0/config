@@ -164,4 +164,5 @@ $config->save();
 
 ## Precautions
 
-Nested sections are not supported for `IniExporter`. Calling `IniExporter->export()` with nested configuration keys WILL NOT throw an exception. 
+Nested sections are not supported for `IniExporter` (as they are generally not support by anyone).\
+Calling `IniExporter->export()` with nested section will throw `UnsupportedNestingException`.
