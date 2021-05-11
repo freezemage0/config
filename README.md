@@ -2,6 +2,10 @@
 `freezemage0/config` is a library that provides an easy way to read and create configuration files.
 Supports `.json`, `.ini` and `.php` formats.
 
+## Installation
+You can install this package using composer:
+`composer require freezemage0/config`
+
 ## Usage
 
 ### ConfigFactory
@@ -108,7 +112,23 @@ $username = $config->get('database.username');
 echo $username; // prints "user"
 ```
 
-Key chaining may be disabled by calling `ImmutableConfig->disableKeyChaining()`. It is enabled by default.
+#### Feature management
+
+##### Local management
+To disable/enable `key chaining` for current instance of `ImmutableConfig`, call `ImmutableConfig->disableKeyChaining()`.
+
+##### Global management
+Example on how to disable/enable `key chaining` for all instances that will be created by `ConfigFactory` object:
+```php
+<?php
+
+use Freezemage\Config\ConfigFactory;
+
+$factory = new ConfigFactory();
+$factory->getFeatureManager()->getKeyChaining()->disable();
+
+$config = $factory->create('config.json'); // key chaining will be disabled for that instance.
+```
 
 #### Saving
 You can also create/edit configuration using `ImmutableConfig::set()` method.
@@ -137,6 +157,27 @@ If the `Exporter` within `ImmutableConfig` doesn't have filename, then it will b
 The same configuration leads to the same filename.
 The generated configuration name can be retrieved via `ImmutableConfig->getExporter()->getFilename()`
 
+#### Section extraction
+You can extract a section from the config and work with it as a separate instance of `ImmutableConfig`.
+The extracted `ImmutableConfig` section will behave exactly as if it was root section.
+Be wary that calling `ImmutableConfig->save()` will rewrite the contents of original config file,
+unless you do something like the following:
+
+```php
+<?php
+
+
+use \Freezemage\Config\ConfigFactory;
+
+
+$factory = new ConfigFactory();
+$config = $factory->create('config.json');
+$database = $config->extractSection('database');
+$database->getExporter()->setFilename('database.json');
+$database->save(); // the content of database section will be saved into a separate 'database.json' file.
+```
+
+
 #### Configuration converting
 You may want to convert configuration from `.json` to `.php` format.
 The following example does exactly that:
@@ -160,7 +201,6 @@ $exporter->setFilename($configName);
 $config->setExporter($exporter);
 $config->save();
 ```
-
 
 ## Precautions
 
