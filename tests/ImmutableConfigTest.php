@@ -21,15 +21,16 @@ class ImmutableConfigTest extends TestCase {
         $importer = $this->createMock(ImporterInterface::class);
         $exporter = $this->createMock(ExporterInterface::class);
         $keyChaining = new KeyChaining();
-        
-        $importer->expects($this->once())
-                ->method('import')
-                ->willReturn(array(
-                    'database' => array(
-                        'username' => 'user')
-                ));
 
-        $importer->expects($this->once())->method('getFilename')->willReturn('test-filename');
+        $importer->expects($this->once())
+                 ->method('import')
+                 ->willReturn(array(
+                                      'database' => array(
+                                              'username' => 'user'
+                                      )
+                              ));
+
+        $importer->expects($this->once())->method('getFilename')->willReturn(__DIR__ . '/asset/config.json');
 
         $config = new ImmutableConfig($importer, $exporter, $keyChaining);
         $value = $config->get('database.username');
@@ -39,13 +40,13 @@ class ImmutableConfigTest extends TestCase {
     public function testGetWithKeyChainingDefaultValue(): void {
         $importer = $this->createMock(ImporterInterface::class);
         $exporter = $this->createMock(ExporterInterface::class);
-        $keyChaining = new KeyCHaining();
-        
-        $importer->expects($this->once())
-            ->method('import')
-            ->willReturn(array('database' => array()));
+        $keyChaining = new KeyChaining();
 
-        $importer->expects($this->once())->method('getFilename')->willReturn('test-filename');
+        $importer->expects($this->once())
+                 ->method('import')
+                 ->willReturn(array('database' => array()));
+
+        $importer->expects($this->once())->method('getFilename')->willReturn(__DIR__ . '/asset/config.json');
 
         $config = new ImmutableConfig($importer, $exporter, $keyChaining);
         $value = $config->get('database.username', 'non-existent-value');
@@ -56,16 +57,16 @@ class ImmutableConfigTest extends TestCase {
         $importer = $this->createMock(ImporterInterface::class);
         $exporter = $this->createMock(ExporterInterface::class);
         $keyChaining = new KeyChaining();
-        
+
         $config = new ImmutableConfig($importer, $exporter, $keyChaining);
 
         $config = $config->set('database.username', 'user')->set('database.password', 'password');
         $this->assertSame(
-            array('database' => array(
-                'username' => 'user',
-                'password' => 'password',
-            )),
-            $config->getConfig()
+                array('database' => array(
+                        'username' => 'user',
+                        'password' => 'password',
+                )),
+                $config->getConfig()
         );
     }
 
@@ -73,12 +74,12 @@ class ImmutableConfigTest extends TestCase {
         $importer = $this->createMock(ImporterInterface::class);
         $exporter = $this->createMock(ExporterInterface::class);
         $keyChaining = new KeyChaining();
-        
-        $importer->expects($this->once())
-            ->method('import')
-            ->willReturn(array('database.username' => 'user'));
 
-        $importer->expects($this->once())->method('getFilename')->willReturn('test-filename');
+        $importer->expects($this->once())
+                 ->method('import')
+                 ->willReturn(array('database.username' => 'user'));
+
+        $importer->expects($this->once())->method('getFilename')->willReturn(__DIR__ . '/asset/config.json');
 
         $config = new ImmutableConfig($importer, $exporter, $keyChaining);
         $config->disableKeyChaining();
@@ -91,53 +92,53 @@ class ImmutableConfigTest extends TestCase {
         $importer = $this->createMock(ImporterInterface::class);
         $exporter = $this->createMock(ExporterInterface::class);
         $keyChaining = new KeyChaining();
-        
+
         $config = new ImmutableConfig($importer, $exporter, $keyChaining);
         $config->disableKeyChaining();
 
         $config = $config->set('database.username', 'user')->set('database.password', 'password');
 
         $this->assertSame(
-            array('database.username' => 'user', 'database.password' => 'password'),
-            $config->getConfig()
+                array('database.username' => 'user', 'database.password' => 'password'),
+                $config->getConfig()
         );
 
     }
-    
+
     public function testExtractSection(): void {
         $importer = new JsonImporter();
         $exporter = new JsonExporter();
-        
+
         $importer->setFilename(__DIR__ . '/asset/config.json');
         $exporter->setFilename(__DIR__ . '/asset/config-section.json');
-        
+
         $keyChaining = new KeyChaining();
-        
+
         $config = new ImmutableConfig($importer, $exporter, $keyChaining);
         $section = $config->extractSection('database');
         $section->save();
         $this->assertFileExists(__DIR__ . '/asset/config-section.json');
         unlink(__DIR__ . '/asset/config-section.json');
     }
-    
+
     /**
      * @dataProvider dependenciesProvider
      */
     public function testImport(ImporterInterface $importer, ExporterInterface $exporter, string $file): void {
         $importer->setFilename($file);
-        
+
         $keyChaining = new KeyChaining();
-        
+
         $config = new ImmutableConfig(
                 $importer,
                 $exporter,
                 $keyChaining
         );
-        
+
         $content = $config->getConfig();
         $this->assertEquals(array('database' => array('username' => 'user', 'password' => 'passwd')), $content);
     }
-    
+
     /**
      * @dataProvider dependenciesProvider
      *
@@ -147,25 +148,25 @@ class ImmutableConfigTest extends TestCase {
      */
     public function testExport(ImporterInterface $importer, ExporterInterface $exporter, string $file): void {
         $keyChaining = new KeyChaining();
-        
+
         $importer->setFilename($file);
-        
+
         $config = new ImmutableConfig(
                 $importer,
                 $exporter,
                 $keyChaining
         );
-        
+
         $beforeExport = $config->getConfig();
         $config->save();
-        
+
         $this->assertFileExists($exporter->getFilename());
-        
+
         $importer->setFilename($exporter->getFilename());
         $this->assertEquals($beforeExport, $config->getConfig());
         unlink($exporter->getFilename());
     }
-    
+
     public function dependenciesProvider(): array {
         return array(
                 array(
