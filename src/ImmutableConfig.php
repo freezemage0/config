@@ -148,7 +148,7 @@ class ImmutableConfig implements ConfigInterface {
      * @return array
      */
     public function getConfig(): array {
-        if (!empty($this->config)) {
+        if (isset($this->config)) {
             return $this->config;
         }
 
