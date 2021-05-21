@@ -153,7 +153,7 @@ class ImmutableConfig implements ConfigInterface {
         }
 
         if (!empty($this->importer->getFilename())) {
-            $this->config = $this->importer->import();
+            $this->config = is_file($this->importer->getFilename()) ? $this->importer->import() : array();
         }
 
         return $this->config;
