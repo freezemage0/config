@@ -28,7 +28,7 @@ final class ImmutableConfig implements ConfigInterface
     public function __clone()
     {
         if (isset($this->config)) {
-            $this->config = array_map(fn(ChainedValue $value): ChainedValue => clone $value, $this->config);
+            $this->config = array_map(static fn(ChainedValue $value): ChainedValue => clone $value, $this->config);
         }
     }
 
@@ -83,7 +83,7 @@ final class ImmutableConfig implements ConfigInterface
             foreach ($parts as $index => $part) {
                 $config = array_filter(
                     $config,
-                    fn(ChainedValue $value): bool => isset($value->chain[$index]) && $value->chain[$index] === $part
+                    static fn(ChainedValue $value): bool => isset($value->chain[$index]) && $value->chain[$index] === $part
                 );
             }
 
@@ -216,7 +216,7 @@ final class ImmutableConfig implements ConfigInterface
             foreach ($parts as $index => $part) {
                 $chains = array_filter(
                     $chains,
-                    fn(ChainedValue $value): bool => isset($value->chain[$index]) && $value->chain[$index] === $part
+                    static fn(ChainedValue $value): bool => isset($value->chain[$index]) && $value->chain[$index] === $part
                 );
             }
             if (empty($chains)) {
