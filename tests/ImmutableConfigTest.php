@@ -220,17 +220,17 @@ class ImmutableConfigTest extends TestCase
     public function dependenciesProvider(): array
     {
         return array(
-            array(
+            'json configuration' => array(
                 new JsonImporter(),
-                new JSonExporter(),
+                new JsonExporter(),
                 __DIR__ . '/asset/config.json'
             ),
-            array(
+            'php configuration' => array(
                 new PhpImporter(),
                 new PhpExporter(),
                 __DIR__ . '/asset/config.php'
             ),
-            array(
+            'ini configuration' => array(
                 new IniImporter(),
                 new IniExporter(),
                 __DIR__ . '/asset/config.ini'

@@ -21,17 +21,17 @@ class ConfigFactoryTest extends TestCase
     public function configNameProvider(): array
     {
         return array(
-            array(
+            'json configuration' => array(
                 __DIR__ . '/asset/config.json',
                 JsonImporter::class,
                 JsonExporter::class
             ),
-            array(
+            'ini configuration' => array(
                 __DIR__ . '/asset/config.ini',
                 IniImporter::class,
                 IniExporter::class
             ),
-            array(
+            'php configuration' => array(
                 __DIR__ . '/asset/config.php',
                 PhpImporter::class,
                 PhpExporter::class
