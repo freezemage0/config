@@ -23,6 +23,11 @@
       "Freezemage\\Config\\": "src"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Freezemage\\Config\\Test\\": "tests"
+    }
+  },
   "scripts": {
     "test": "vendor/bin/phpunit --do-not-cache-result"
   }
