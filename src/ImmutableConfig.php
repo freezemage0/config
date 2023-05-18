@@ -111,11 +111,11 @@ final class ImmutableConfig implements ConfigInterface
                 },
                 []
             );
-        } else {
-            foreach ($config as $chainedValue) {
-                if ($chainedValue->getFullName() === $key) {
-                    return $chainedValue->value;
-                }
+        }
+
+        foreach ($config as $chainedValue) {
+            if ($chainedValue->getFullName() === $key) {
+                return $chainedValue->value;
             }
         }
 
