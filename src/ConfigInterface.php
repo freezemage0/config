@@ -12,7 +12,7 @@ interface ConfigInterface
 {
     public function get(string $key, $defaultValue = null);
 
-    public function set(string $key, $value): ConfigInterface;
+    public function set(string $key, $value): self;
 
     public function getConfig(): array;
 

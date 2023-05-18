@@ -41,7 +41,7 @@ final class ImmutableConfig implements ConfigInterface
      * @param string $name
      * @return ImmutableConfig
      */
-    public function extractSection(string $name): ImmutableConfig
+    public function extractSection(string $name): self
     {
         $section = $this->get($name);
 
