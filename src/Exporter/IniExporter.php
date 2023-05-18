@@ -40,7 +40,7 @@ class IniExporter implements ExporterInterface
             $this->filename = md5($content) . '.ini';
         }
 
-        $file = fopen($this->filename, 'w');
+        $file = fopen($this->filename, 'wb');
         fwrite($file, $content);
         fclose($file);
     }

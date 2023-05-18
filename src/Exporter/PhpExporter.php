@@ -20,7 +20,7 @@ class PhpExporter implements ExporterInterface
             $this->filename = $filenameGenerator->generateFilename($content);
         }
 
-        $file = fopen($this->filename, 'w');
+        $file = fopen($this->filename, 'wb');
         fwrite($file, $content);
         fclose($file);
     }
