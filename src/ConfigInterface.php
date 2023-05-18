@@ -8,10 +8,11 @@ use Freezemage\Config\Exporter\ExporterInterface;
 use Freezemage\Config\Importer\ImporterInterface;
 
 
-interface ConfigInterface {
+interface ConfigInterface
+{
     public function get(string $key, $defaultValue = null);
 
-    public function set($key, $value): ConfigInterface;
+    public function set(string $key, $value): ConfigInterface;
 
     public function getConfig(): array;
 

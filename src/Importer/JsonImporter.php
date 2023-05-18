@@ -7,11 +7,15 @@ namespace Freezemage\Config\Importer;
 use Freezemage\Config\Exception\MalformedConfigException;
 
 
-class JsonImporter implements ImporterInterface {
-    /** @var string|null $filename */
-    protected $filename;
+class JsonImporter implements ImporterInterface
+{
+    protected ?string $filename;
 
-    public function import(): array {
+    /**
+     * @throws MalformedConfigException
+     */
+    public function import(): array
+    {
         $content = file_get_contents($this->filename);
         $config = json_decode($content, true);
 
@@ -25,11 +29,13 @@ class JsonImporter implements ImporterInterface {
         return $config;
     }
 
-    public function setFilename(string $filename): void {
-        $this->filename = $filename;
+    public function getFilename(): ?string
+    {
+        return $this->filename ?? null;
     }
 
-    public function getFilename(): ?string {
-        return $this->filename ?? null;
+    public function setFilename(string $filename): void
+    {
+        $this->filename = $filename;
     }
 }

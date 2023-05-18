@@ -7,10 +7,15 @@ namespace Freezemage\Config\Importer;
 use Freezemage\Config\Exception\MalformedConfigException;
 
 
-class PhpImporter implements ImporterInterface {
-    protected $filename;
+class PhpImporter implements ImporterInterface
+{
+    protected ?string $filename;
 
-    public function import(): array {
+    /**
+     * @throws MalformedConfigException
+     */
+    public function import(): array
+    {
         /** @noinspection PhpIncludeInspection */
         $content = include $this->filename;
         if (empty($content) || !is_array($content)) {
@@ -20,11 +25,13 @@ class PhpImporter implements ImporterInterface {
         return $content;
     }
 
-    public function setFilename(string $filename): void {
-        $this->filename = $filename;
+    public function getFilename(): ?string
+    {
+        return $this->filename;
     }
 
-    public function getFilename(): ?string {
-        return $this->filename;
+    public function setFilename(string $filename): void
+    {
+        $this->filename = $filename;
     }
 }

@@ -6,12 +6,15 @@ namespace Freezemage\Config\Exporter;
 
 use Freezemage\Config\ConfigInterface;
 use Freezemage\Config\Exception\UnsupportedNestingException;
+use Freezemage\Config\Feature\FilenameGenerator;
 
 
-class IniExporter implements ExporterInterface {
-    protected $filename;
+class IniExporter implements ExporterInterface
+{
+    protected ?string $filename;
 
-    public function export(ConfigInterface $config): void {
+    public function export(ConfigInterface $config, FilenameGenerator $filenameGenerator): void
+    {
         $data = $config->getConfig();
 
         $content = '';
@@ -23,7 +26,7 @@ class IniExporter implements ExporterInterface {
                 foreach ($items as $name => $item) {
                     if (is_array($item)) {
                         throw new UnsupportedNestingException(
-                                'Ini files do not support nesting sections.'
+                            'Ini files do not support nesting sections.'
                         );
                     }
                     $content .= sprintf('%s=%s', $name, $item) . PHP_EOL;
@@ -42,11 +45,13 @@ class IniExporter implements ExporterInterface {
         fclose($file);
     }
 
-    public function setFilename(string $filename): void {
-        $this->filename = $filename;
+    public function getFilename(): ?string
+    {
+        return $this->filename;
     }
 
-    public function getFilename(): ?string {
-        return $this->filename;
+    public function setFilename(string $filename): void
+    {
+        $this->filename = $filename;
     }
 }

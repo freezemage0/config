@@ -5,16 +5,19 @@ namespace Freezemage\Config\Exporter;
 
 
 use Freezemage\Config\ConfigInterface;
+use Freezemage\Config\Feature\FilenameGenerator;
 
 
-class PhpExporter implements ExporterInterface {
-    protected $filename;
+class PhpExporter implements ExporterInterface
+{
+    protected ?string $filename;
 
-    public function export(ConfigInterface $config): void {
+    public function export(ConfigInterface $config, FilenameGenerator $filenameGenerator): void
+    {
         $content = '<?php' . PHP_EOL . PHP_EOL . 'return ' . var_export($config->getConfig(), true) . ';' . PHP_EOL;
 
         if (empty($this->filename)) {
-            $this->filename = md5($content) . '.php';
+            $this->filename = $filenameGenerator->generateFilename($content);
         }
 
         $file = fopen($this->filename, 'w');
@@ -22,11 +25,13 @@ class PhpExporter implements ExporterInterface {
         fclose($file);
     }
 
-    public function setFilename(string $filename): void {
-        $this->filename = $filename;
+    public function getFilename(): ?string
+    {
+        return $this->filename;
     }
 
-    public function getFilename(): ?string {
-        return $this->filename;
+    public function setFilename(string $filename): void
+    {
+        $this->filename = $filename;
     }
 }

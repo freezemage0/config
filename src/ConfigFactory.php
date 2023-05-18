@@ -10,22 +10,21 @@ use Freezemage\Config\Exporter\ExporterInterface;
 use Freezemage\Config\Exporter\IniExporter;
 use Freezemage\Config\Exporter\JsonExporter;
 use Freezemage\Config\Exporter\PhpExporter;
-use Freezemage\Config\Feature\FeatureManager;
 use Freezemage\Config\Importer\ImporterInterface;
 use Freezemage\Config\Importer\IniImporter;
 use Freezemage\Config\Importer\JsonImporter;
 use Freezemage\Config\Importer\PhpImporter;
 
 
-final class ConfigFactory {
-    protected $importerMap;
-    protected $exporterMap;
-    protected $featureManager;
+final class ConfigFactory
+{
+    protected array $importerMap;
+    protected array $exporterMap;
 
-    public function __construct(?FeatureManager $featureManager = null) {
+    public function __construct()
+    {
         $this->importerMap = array();
         $this->exporterMap = array();
-        $this->featureManager = $featureManager;
 
         $this->registerImporter('json', new JsonImporter());
         $this->registerImporter('ini', new IniImporter());
@@ -36,41 +35,16 @@ final class ConfigFactory {
         $this->registerExporter('php', new PhpExporter());
     }
 
-    public function registerImporter(string $format, ImporterInterface $importer) {
+    public function registerImporter(string $format, ImporterInterface $importer)
+    {
         $this->importerMap[$format] = $importer;
     }
 
-    public function registerExporter(string $format, ExporterInterface $exporter) {
+    public function registerExporter(string $format, ExporterInterface $exporter)
+    {
         $this->exporterMap[$format] = $exporter;
     }
 
-    public function findImporter(string $format): ImporterInterface {
-        foreach ($this->importerMap as $f => $importer) {
-            if ($f == $format) {
-                return clone $importer;
-            }
-        }
-
-        throw new UnsupportedFileExtensionException(sprintf('File extension "%s" is not supported.', $format));
-    }
-
-    public function findExporter(string $format): ExporterInterface {
-        foreach ($this->exporterMap as $f => $exporter) {
-            if ($f == $format) {
-                return clone $exporter;
-            }
-        }
-
-        throw new UnsupportedFileExtensionException(sprintf('File extension "%s" is not supported.', $format));
-    }
-
-    public function getFeatureManager(): FeatureManager {
-        if (!isset($this->featureManager)) {
-            $this->featureManager = new FeatureManager();
-        }
-        return $this->featureManager;
-    }
-    
     /**
      * @param string $filename
      *
@@ -79,7 +53,10 @@ final class ConfigFactory {
      * @throws InvalidConfigFileException
      * @throws UnsupportedFileExtensionException
      */
-    public function create(string $filename): ConfigInterface {
+    public function create(string $filename, Settings $settings = null): ConfigInterface
+    {
+        $settings ??= new Settings();
+
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
         if (empty($extension)) {
@@ -92,7 +69,34 @@ final class ConfigFactory {
         $exporter = $this->findExporter($extension);
         $exporter->setFilename($filename);
 
-        $keyChaining = clone $this->getFeatureManager()->getKeyChaining();
-        return new ImmutableConfig($importer, $exporter, $keyChaining);
+        return new ImmutableConfig($importer, $exporter, $settings);
+    }
+
+    /**
+     * @throws UnsupportedFileExtensionException
+     */
+    public function findImporter(string $format): ImporterInterface
+    {
+        foreach ($this->importerMap as $f => $importer) {
+            if ($f == $format) {
+                return clone $importer;
+            }
+        }
+
+        throw new UnsupportedFileExtensionException(sprintf('File extension "%s" is not supported.', $format));
+    }
+
+    /**
+     * @throws UnsupportedFileExtensionException
+     */
+    public function findExporter(string $format): ExporterInterface
+    {
+        foreach ($this->exporterMap as $f => $exporter) {
+            if ($f == $format) {
+                return clone $exporter;
+            }
+        }
+
+        throw new UnsupportedFileExtensionException(sprintf('File extension "%s" is not supported.', $format));
     }
 }

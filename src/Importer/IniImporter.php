@@ -7,11 +7,12 @@ namespace Freezemage\Config\Importer;
 use Freezemage\Config\Exception\MalformedConfigException;
 
 
-class IniImporter implements ImporterInterface {
-    /** @var string|null $filename */
-    protected $filename;
+class IniImporter implements ImporterInterface
+{
+    protected ?string $filename;
 
-    public function import(): array {
+    public function import(): array
+    {
         $content = parse_ini_file($this->filename, true);
 
         if ($content === false) {
@@ -21,11 +22,13 @@ class IniImporter implements ImporterInterface {
         return $content;
     }
 
-    public function setFilename(string $filename): void {
-        $this->filename = $filename;
+    public function getFilename(): ?string
+    {
+        return $this->filename ?? null;
     }
 
-    public function getFilename(): ?string {
-        return $this->filename ?? null;
+    public function setFilename(string $filename): void
+    {
+        $this->filename = $filename;
     }
 }

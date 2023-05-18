@@ -7,4 +7,6 @@ namespace Freezemage\Config\Exception;
 use Exception;
 
 
-class InvalidConfigFileException extends Exception implements ConfigException {}
+class InvalidConfigFileException extends Exception implements ConfigException
+{
+}

@@ -15,8 +15,10 @@ use Freezemage\Config\Importer\PhpImporter;
 use PHPUnit\Framework\TestCase;
 
 
-class ConfigFactoryTest extends TestCase {
-    public function configNameProvider(): array {
+class ConfigFactoryTest extends TestCase
+{
+    public function configNameProvider(): array
+    {
         return array(
             array(
                 __DIR__ . '/asset/config.json',
@@ -46,7 +48,8 @@ class ConfigFactoryTest extends TestCase {
      * @throws InvalidConfigFileException
      * @throws UnsupportedFileExtensionException
      */
-    public function testCreate(string $path, string $importerClass, string $exporterClass): void {
+    public function testCreate(string $path, string $importerClass, string $exporterClass): void
+    {
         $factory = new ConfigFactory();
 
         $config = $factory->create($path);
@@ -54,14 +57,16 @@ class ConfigFactoryTest extends TestCase {
         $this->assertInstanceOf($exporterClass, $config->getExporter());
     }
 
-    public function testUnsupportedExtension(): void {
+    public function testUnsupportedExtension(): void
+    {
         $factory = new ConfigFactory();
 
         $this->expectException(UnsupportedFileExtensionException::class);
         $factory->create('unknown.extension');
     }
 
-    public function testMissingFileExtension(): void {
+    public function testMissingFileExtension(): void
+    {
         $factory = new ConfigFactory();
 
         $this->expectException(InvalidConfigFileException::class);
