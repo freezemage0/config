@@ -36,9 +36,6 @@ final class ImmutableConfig implements ConfigInterface
      * Detached section behaves as a whole separate config, but points to original file.
      * See {@link ImporterInterface::setFilename()} and {@link ExporterInterface::setFilename()}
      * on how to change the import/export filename.
-     *
-     * @param string $name
-     * @return ImmutableConfig
      */
     public function extractSection(string $name): self
     {
@@ -66,9 +63,6 @@ final class ImmutableConfig implements ConfigInterface
      *  Key chain 'database.username' will return 'user'.
      *
      * Key chaining makes it impossible to read configuration keys which contain dot.
-     *
-     * @param string $key
-     * @param null $defaultValue
      *
      * @return mixed|null
      */
@@ -157,8 +151,6 @@ final class ImmutableConfig implements ConfigInterface
 
     /**
      * Lazy-loads and returns full configuration.
-     *
-     * @return array
      */
     public function getConfig(): array
     {
@@ -198,11 +190,6 @@ final class ImmutableConfig implements ConfigInterface
      *      )
      *
      * Key chaining makes it impossible to read configuration keys which contain dot.
-     *
-     * @param $key
-     * @param $value
-     *
-     * @return ConfigInterface
      */
     public function set(string $key, $value): ConfigInterface
     {

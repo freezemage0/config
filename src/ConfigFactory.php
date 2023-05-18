@@ -46,10 +46,6 @@ final class ConfigFactory
     }
 
     /**
-     * @param string $filename
-     *
-     * @return ConfigInterface
-     *
      * @throws InvalidConfigFileException
      * @throws UnsupportedFileExtensionException
      */

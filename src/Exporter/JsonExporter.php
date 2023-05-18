@@ -10,9 +10,6 @@ use Freezemage\Config\Feature\FilenameGenerator;
 
 class JsonExporter implements ExporterInterface
 {
-    /**
-     * @var string
-     */
     protected ?string $filename;
 
     public function export(ConfigInterface $config, FilenameGenerator $filenameGenerator): void
