@@ -7,7 +7,6 @@ namespace Freezemage\Config;
 use Freezemage\Config\Exporter\ExporterInterface;
 use Freezemage\Config\Importer\ImporterInterface;
 use Freezemage\Config\Internal\ChainedValue;
-use OutOfBoundsException;
 
 
 final class ImmutableConfig implements ConfigInterface
