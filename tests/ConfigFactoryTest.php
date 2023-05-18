@@ -1,9 +1,10 @@
 <?php
 
 
-namespace Freezemage\Config;
+namespace Freezemage\Config\Test;
 
 
+use Freezemage\Config\ConfigFactory;
 use Freezemage\Config\Exception\InvalidConfigFileException;
 use Freezemage\Config\Exception\UnsupportedFileExtensionException;
 use Freezemage\Config\Exporter\IniExporter;

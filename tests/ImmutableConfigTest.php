@@ -1,17 +1,19 @@
 <?php
 
 
-namespace Freezemage\Config;
+namespace Freezemage\Config\Test;
 
 
 use Freezemage\Config\Exporter\ExporterInterface;
 use Freezemage\Config\Exporter\IniExporter;
 use Freezemage\Config\Exporter\JsonExporter;
 use Freezemage\Config\Exporter\PhpExporter;
+use Freezemage\Config\ImmutableConfig;
 use Freezemage\Config\Importer\ImporterInterface;
 use Freezemage\Config\Importer\IniImporter;
 use Freezemage\Config\Importer\JsonImporter;
 use Freezemage\Config\Importer\PhpImporter;
+use Freezemage\Config\Settings;
 use PHPUnit\Framework\TestCase;
 
 
