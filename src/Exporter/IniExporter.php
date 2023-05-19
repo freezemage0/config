@@ -11,7 +11,7 @@ use Freezemage\Config\Feature\FilenameGenerator;
 
 class IniExporter implements ExporterInterface
 {
-    protected ?string $filename;
+    protected ?string $filename = null;
 
     public function export(ConfigInterface $config, FilenameGenerator $filenameGenerator): void
     {
@@ -37,7 +37,7 @@ class IniExporter implements ExporterInterface
         }
 
         if (empty($this->filename)) {
-            $this->filename = md5($content) . '.ini';
+            $this->filename = $filenameGenerator->generateFilename($content) . '.ini';
         }
 
         $file = fopen($this->filename, 'wb');

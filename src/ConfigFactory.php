@@ -18,7 +18,9 @@ use Freezemage\Config\Importer\PhpImporter;
 
 final class ConfigFactory
 {
+    /** @var array<string, ImporterInterface> */
     protected array $importerMap;
+    /** @var array<string, ExporterInterface> */
     protected array $exporterMap;
 
     public function __construct()
@@ -35,12 +37,12 @@ final class ConfigFactory
         $this->registerExporter('php', new PhpExporter());
     }
 
-    public function registerImporter(string $format, ImporterInterface $importer)
+    public function registerImporter(string $format, ImporterInterface $importer): void
     {
         $this->importerMap[$format] = $importer;
     }
 
-    public function registerExporter(string $format, ExporterInterface $exporter)
+    public function registerExporter(string $format, ExporterInterface $exporter): void
     {
         $this->exporterMap[$format] = $exporter;
     }

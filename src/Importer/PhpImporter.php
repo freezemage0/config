@@ -9,7 +9,7 @@ use Freezemage\Config\Exception\MalformedConfigException;
 
 class PhpImporter implements ImporterInterface
 {
-    protected ?string $filename;
+    protected ?string $filename = null;
 
     /**
      * @throws MalformedConfigException
