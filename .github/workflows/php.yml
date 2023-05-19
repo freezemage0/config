@@ -33,5 +33,8 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
+    - name: Run code-quality tools
+      run: composer run-script code-quality
+
     - name: Run test suite
       run: composer run-script test
